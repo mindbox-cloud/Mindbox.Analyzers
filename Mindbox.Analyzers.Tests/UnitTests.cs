@@ -95,6 +95,84 @@ public class UnitTest : CodeFixVerifier
 	}
 
 	[TestMethod]
+	public void ColumnRule_WorkingOnEfColumn()
+	{
+		var test =
+			@"
+			    class Test
+			    {			    	
+			    	[Column(""Id"")]
+			    	public int TestProp {get;set;}
+			    }";
+
+		var rule = new NameOfInColumnAttributesRequiredRule();
+		var expected = new DiagnosticResult
+		{
+			Id = rule.DiagnosticDescriptor.Id,
+			Message = rule.DiagnosticDescriptor.MessageFormat.ToString(),
+			Severity = DiagnosticSeverity.Warning,
+			Locations = new[]
+			{
+				new DiagnosticResultLocation("Test0.cs", 4, 17)
+			}
+		};
+
+		VerifyCSharpDiagnostic(test, expected);
+	}
+
+	[TestMethod]
+	public void ColumnRule_WorkingOnEfColumn_WithExplicitNameToken()
+	{
+		var test =
+			@"
+			    class Test
+			    {			    	
+			    	[Column(name:""Id"")]
+			    	public int TestProp {get;set;}
+			    }";
+
+		var rule = new NameOfInColumnAttributesRequiredRule();
+		var expected = new DiagnosticResult
+		{
+			Id = rule.DiagnosticDescriptor.Id,
+			Message = rule.DiagnosticDescriptor.MessageFormat.ToString(),
+			Severity = DiagnosticSeverity.Warning,
+			Locations = new[]
+			{
+				new DiagnosticResultLocation("Test0.cs", 4, 22)
+			}
+		};
+
+		VerifyCSharpDiagnostic(test, expected);
+	}
+
+	[TestMethod]
+	public void ColumnRule_WorkingForLinq2Sql()
+	{
+		var test =
+			@"
+			    class Test
+			    {			    	
+			    	[Column(Storage = ""Id"")]
+			    	public int TestProp {get;set;}
+			    }";
+
+		var rule = new NameOfInColumnAttributesRequiredRule();
+		var expected = new DiagnosticResult
+		{
+			Id = rule.DiagnosticDescriptor.Id,
+			Message = rule.DiagnosticDescriptor.MessageFormat.ToString(),
+			Severity = DiagnosticSeverity.Warning,
+			Locations = new[]
+			{
+				new DiagnosticResultLocation("Test0.cs", 4, 27)
+			}
+		};
+
+		VerifyCSharpDiagnostic(test, expected);
+	}
+
+	[TestMethod]
 	public void NoTestsWithoutOwnerRule()
 	{
 		var test =
