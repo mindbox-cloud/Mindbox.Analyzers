@@ -26,12 +26,12 @@ public class NameOfInColumnAttributesRequiredRule : AnalyzerRule, ITreeAnalyzerR
 			.SelectMany(property => property.AttributeLists
 				.SelectMany(list => list.Attributes
 					.Where(attr => attr.Name.ToString() is "Column" or "Association")
-					.Where(attr => attr.ArgumentList != null)))
+					.Where(attr => attr.ArgumentList?.Arguments != null)))
 			.SelectMany(columnAttribute => columnAttribute
 				.ArgumentList
 				.Arguments
-				.Where(argument => argument.NameEquals.Name.Identifier.Text is "Storage"
-											or "ThisKey"))
+				.Where(argument => (argument.NameEquals?.Name.Identifier.Text is "Storage" or "ThisKey")
+					|| (argument.NameEquals is null && (argument.NameColon is null || argument.NameColon.Name.Identifier.Text == "name"))))
 			.Where(storageArgument => storageArgument != null)
 			.Where(storageArgument => storageArgument.Expression.IsKind(SyntaxKind.StringLiteralExpression))
 			.Select(storageArgument => CreateDiagnosticForLocation(storageArgument.Expression.GetLocation()))
