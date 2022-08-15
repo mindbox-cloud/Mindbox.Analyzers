@@ -1,13 +1,12 @@
-﻿<Project>
+<Project>
   <PropertyGroup>
     <LangVersion>latest</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
   </PropertyGroup>
-  
   <ItemGroup>
     <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="17.2.32" PrivateAssets="all">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-  </ItemGroup>  
+  </ItemGroup>
 </Project>
