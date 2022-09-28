@@ -17,7 +17,7 @@
         <PackageReference Include="MSTest.TestAdapter" Version="2.2.8" />
         <PackageReference Include="MSTest.TestFramework" Version="2.2.8" />
         <PackageReference Include="coverlet.collector" Version="3.1.2" />
-        <PackageReference Include="Mindbox.Commons.Model" Version="214.1.5" />
+        <PackageReference Include="Mindbox.Commons.Model" Version="214.2.9" />
     </ItemGroup>
 
 </Project>
