@@ -4,6 +4,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using MindboxAnalyzers.Rules;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using LocalizableString = Mindbox.I18n.Abstractions.LocalizableString;
 
 namespace MindboxAnalyzers.Tests;
 
@@ -96,6 +97,7 @@ public class TstModelPart : Module
 		var compilation = CSharpCompilation.Create("TestSolution")
 			.AddReferences(MetadataReference.CreateFromFile(
 					typeof(ModelApplicationHostController).Assembly.Location), // Load Commons into test compilation
+				MetadataReference.CreateFromFile(typeof(LocalizableString).Assembly.Location), // Load I18n.Abstractions into test compilation
 				MetadataReference.CreateFromFile(
 					Assembly.Load("Mindbox.I18n, Version=1.3.2.0, Culture=neutral, PublicKeyToken=null")
 						.Location), // Load Mindbox.I18n into test compilation
