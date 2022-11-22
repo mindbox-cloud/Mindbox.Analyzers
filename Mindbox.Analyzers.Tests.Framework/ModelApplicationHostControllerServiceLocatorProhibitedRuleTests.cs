@@ -39,7 +39,7 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        var service = Itc.Commons.Model.ModelApplicationHostController.Instance.Get<Itc.Commons.Model.ITenantValidator>();
+        var service = Itc.Commons.Model.ModelApplicationHostController.Instance.Get<Itc.Commons.Model.IFeatureService>();
     }
 }";
 
@@ -64,9 +64,9 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        var service1 = Itc.Commons.Model.ModelApplicationHostController.Instance.Get<Itc.Commons.Model.ITenantValidator>();
+        var service1 = Itc.Commons.Model.ModelApplicationHostController.Instance.Get<Itc.Commons.Model.IFeatureService>();
         var separator = 0;
-        var service2 = Itc.Commons.Model.ModelApplicationHostController.Instance.Get<Itc.Commons.Model.ITenantValidator>();
+        var service2 = Itc.Commons.Model.ModelApplicationHostController.Instance.Get<Itc.Commons.Model.IFeatureService>();
     }
 }";
 
@@ -97,7 +97,7 @@ public class Program
     {
         var service = Itc.Commons.Model.ModelApplicationHostController
             .Instance
-            .Get<Itc.Commons.Model.ITenantValidator>();
+            .Get<Itc.Commons.Model.IFeatureService>();
     }
 }";
 
@@ -125,11 +125,11 @@ public class Program
     {
         var service1 = Itc.Commons.Model.ModelApplicationHostController
             .Instance
-            .Get<Itc.Commons.Model.ITenantValidator>();
+            .Get<Itc.Commons.Model.IFeatureService>();
         var separator = 0;
         var service2 = Itc.Commons.Model.ModelApplicationHostController
             .Instance
-            .Get<Itc.Commons.Model.ITenantValidator>();
+            .Get<Itc.Commons.Model.IFeatureService>();
     }
 }";
 
@@ -159,7 +159,7 @@ public class Program
     public static void Main(string[] args)
     {
         var mahc = Itc.Commons.Model.ModelApplicationHostController.Instance;
-        var service = mahc.Get<Itc.Commons.Model.ITenantValidator>(); // <------ Problematic line: MAHC.Get
+        var service = mahc.Get<Itc.Commons.Model.IFeatureService>(); // <------ Problematic line: MAHC.Get
     }
 }";
 
@@ -188,7 +188,7 @@ public class Program
     public static void Main(string[] args)
     {
         var mahc = Itc.Commons.Model.ModelApplicationHostController.Instance;
-        var service = MyGetMethod<ITenantValidator>(mahc);
+        var service = MyGetMethod<IFeatureService>(mahc);
     }
 
     private static T MyGetMethod<T>(ModelApplicationHostController mahc) where T : class
