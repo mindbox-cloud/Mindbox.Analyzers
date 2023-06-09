@@ -20,7 +20,7 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Mindbox.Commons.Model" Version="294.0.825" />
+        <PackageReference Include="Mindbox.Commons.Model" Version="296.0.831" />
     </ItemGroup>
 
 </Project>
