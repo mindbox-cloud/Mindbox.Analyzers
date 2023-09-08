@@ -18,7 +18,9 @@ jobs:
           dotnet-version: 6.0.x
 
       - name: Install dependencies
-        run: dotnet restore
+        run: |
+          dotnet nuget update source github --username USERNAME --password ${{ secrets.GH_FULL_TOKEN }} --store-password-in-clear-text
+          dotnet restore
 
       - name: Build
         run: dotnet build ./Mindbox.Analyzers.sln --configuration Release --no-restore
