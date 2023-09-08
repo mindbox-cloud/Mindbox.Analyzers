@@ -19,7 +19,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          dotnet nuget update source github --username USERNAME --password ${{ secrets.GH_FULL_TOKEN }} --store-password-in-clear-text
+          dotnet nuget update source github --username USERNAME --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text
           dotnet restore
 
       - name: Build
