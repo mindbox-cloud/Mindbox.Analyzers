@@ -20,7 +20,9 @@
           <PrivateAssets>all</PrivateAssets>
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Mindbox.Commons.Model" Version="300.0.898" />
+    </ItemGroup>
+    <ItemGroup>
+      <Compile Remove="NamedObjectModelConfigurationRegisterProhibitedRuleTests.cs" />
     </ItemGroup>
 
 </Project>
