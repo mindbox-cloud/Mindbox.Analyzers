@@ -21,8 +21,5 @@
           <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
     </ItemGroup>
-    <ItemGroup>
-      <Compile Remove="NamedObjectModelConfigurationRegisterProhibitedRuleTests.cs" />
-    </ItemGroup>
 
 </Project>
