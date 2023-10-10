@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Diagnostics;
 using Microsoft.CodeAnalysis.Text;
 
 namespace MindboxAnalyzers;
@@ -40,6 +41,11 @@ public interface ISemanticModelAnalyzerRule : IAnalyzerRule
 	/// <param name="model">Semantic model</param>
 	/// <param name="foundProblems">Collection of found problems. If everything is fine, <c>null</c> is returned.</param>
 	void AnalyzeModel(SemanticModel model, out ICollection<Diagnostic> foundProblems);
+}
+
+public interface ISyntaxNodeAnalyzerRule
+{
+	void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context, out ICollection<Diagnostic> foundProblems);
 }
 
 public abstract class AnalyzerRule : IAnalyzerRule

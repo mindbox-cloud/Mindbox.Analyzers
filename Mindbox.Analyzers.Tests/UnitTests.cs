@@ -205,6 +205,72 @@ public class UnitTest : CodeFixVerifier
 		VerifyCSharpDiagnostic(test, expected);
 	}
 
+	[TestMethod]
+	public void ForbidMarsRule_Marked_Property_Test()
+	{
+		var test = @"
+class PropertyOwner
+{
+	[LastResortUse]
+	public bool TestProperty {get;set;}
+}
+
+class TestClass
+{
+	public TestClass()
+	{
+		var po = new PropertyOwner();
+		po.TestProperty = true;
+	}
+}
+		";
+		var rule = new AvoidUsingMarkedWithLastResortUse();
+		var expected = new DiagnosticResult
+		{
+			Id = rule.DiagnosticDescriptor.Id,
+			Message = rule.DiagnosticDescriptor.MessageFormat.ToString(),
+			Severity = DiagnosticSeverity.Error,
+			Locations = new[]
+			{
+				new DiagnosticResultLocation("Test0.cs", 13, 3)
+			}
+		};
+		VerifyCSharpDiagnostic(test, expected);
+	}
+
+	[TestMethod]
+	public void ForbidMarsRule_Marked_PropertyOwner_Test()
+	{
+		var test = @"
+[LastResortUse]
+class PropertyOwner
+{
+	public bool TestProperty {get;set;}
+}
+
+class TestClass
+{
+	public TestClass()
+	{
+		var po = new PropertyOwner();
+		po.TestProperty = true;
+	}
+}
+		";
+		var rule = new AvoidUsingMarkedWithLastResortUse();
+		var expected = new DiagnosticResult
+		{
+			Id = rule.DiagnosticDescriptor.Id,
+			Message = rule.DiagnosticDescriptor.MessageFormat.ToString(),
+			Severity = DiagnosticSeverity.Error,
+			Locations = new[]
+			{
+				new DiagnosticResultLocation("Test0.cs", 13, 3)
+			}
+		};
+		VerifyCSharpDiagnostic(test, expected);
+	}
+
 	/*
 	[TestMethod]
 	public void TabsFormattedBySpaces()

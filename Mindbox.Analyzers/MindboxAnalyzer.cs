@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.Diagnostics;
 
 using MindboxAnalyzers.Rules;
@@ -33,7 +34,8 @@ public class MindboxAnalyzer : DiagnosticAnalyzer
 			new CacheItemProviderKeyMustBeStaticRule(),
 			new NoTestWithoutOwnerRule(),
 			new ModelApplicationHostControllerServiceLocatorProhibitedRule(),
-			new NamedObjectModelConfigurationRegisterProhibitedRule()
+			new NamedObjectModelConfigurationRegisterProhibitedRule(),
+			new AvoidUsingMarkedWithLastResortUse()
 		};
 
 		_supportedDiagnostics =
@@ -51,6 +53,22 @@ public class MindboxAnalyzer : DiagnosticAnalyzer
 		context.EnableConcurrentExecution();
 		context.RegisterSyntaxTreeAction(AnalyzeSyntaxTree);
 		context.RegisterSemanticModelAction(AnalyzeSemanticModel);
+		context.RegisterSyntaxNodeAction(AnalyzeSyntaxNode, SyntaxKind.SimpleMemberAccessExpression);
+	}
+
+	private void AnalyzeSyntaxNode(SyntaxNodeAnalysisContext context)
+	{
+		var allDiagnostics = new List<Diagnostic>();
+
+		foreach (var syntaxNodeAnalyzer in _rules.OfType<ISyntaxNodeAnalyzerRule>())
+		{
+			syntaxNodeAnalyzer.AnalyzeSyntaxNode(context, out var foundProblems);
+			if (foundProblems != null)
+				allDiagnostics.AddRange(foundProblems);
+		}
+
+		foreach (var diagnostic in allDiagnostics)
+			context.ReportDiagnostic(diagnostic);
 	}
 
 	private static void AnalyzeSemanticModel(SemanticModelAnalysisContext context)
