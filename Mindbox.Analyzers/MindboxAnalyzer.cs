@@ -33,7 +33,8 @@ public class MindboxAnalyzer : DiagnosticAnalyzer
 			new CacheItemProviderKeyMustBeStaticRule(),
 			new NoTestWithoutOwnerRule(),
 			new ModelApplicationHostControllerServiceLocatorProhibitedRule(),
-			new NamedObjectModelConfigurationRegisterProhibitedRule()
+			new NamedObjectModelConfigurationRegisterProhibitedRule(),
+			new DataContractRequireIfUsingDataMemberRule()
 		};
 
 		_supportedDiagnostics =
