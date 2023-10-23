@@ -6,6 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Serialization;
 
 namespace TestHelper;
 
@@ -19,6 +21,9 @@ public abstract partial class DiagnosticVerifier
 	private static readonly MetadataReference _systemCoreReference = MetadataReference.CreateFromFile(typeof(Enumerable).Assembly.Location);
 	private static readonly MetadataReference _csharpSymbolsReference = MetadataReference.CreateFromFile(typeof(CSharpCompilation).Assembly.Location);
 	private static readonly MetadataReference _codeAnalysisReference = MetadataReference.CreateFromFile(typeof(Compilation).Assembly.Location);
+	private static readonly MetadataReference _runtimeSerializationReference = MetadataReference.CreateFromFile(typeof(DataMemberAttribute).Assembly.Location);
+	private static readonly MetadataReference _attributeReference = MetadataReference.CreateFromFile(typeof(Attribute).Assembly.Location);
+	private static readonly MetadataReference _systemRuntimeReference = MetadataReference.CreateFromFile(Assembly.Load("System.Runtime").Location);
 
 	internal static string DefaultFilePathPrefix = "Test";
 	internal static string CSharpDefaultFileExt = "cs";
@@ -156,7 +161,10 @@ public abstract partial class DiagnosticVerifier
 			.AddMetadataReference(projectId, _corlibReference)
 			.AddMetadataReference(projectId, _systemCoreReference)
 			.AddMetadataReference(projectId, _csharpSymbolsReference)
-			.AddMetadataReference(projectId, _codeAnalysisReference);
+			.AddMetadataReference(projectId, _codeAnalysisReference)
+			.AddMetadataReference(projectId, _runtimeSerializationReference)
+			.AddMetadataReference(projectId, _attributeReference)
+			.AddMetadataReference(projectId, _systemRuntimeReference);
 
 		var count = 0;
 		foreach (var source in sources)
