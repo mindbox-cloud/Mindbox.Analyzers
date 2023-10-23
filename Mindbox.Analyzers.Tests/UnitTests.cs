@@ -205,6 +205,150 @@ public class UnitTest : CodeFixVerifier
 		VerifyCSharpDiagnostic(test, expected);
 	}
 
+	[TestMethod]
+	public void DataContractRule_DataContractAttributeOmitted_DiagnosticResult()
+	{
+		var test =
+			@"
+				using System.Runtime.Serialization;
+
+				public class Test
+				{
+					[DataMember]
+					public string Property { get; set; }
+				}";
+		var rule = new DataContractRequireIfUsingDataMemberRule();
+		var expected = new DiagnosticResult()
+		{
+			Id = rule.DiagnosticDescriptor.Id,
+			Message = rule.DiagnosticDescriptor.MessageFormat.ToString(),
+			Severity = DiagnosticSeverity.Warning,
+			Locations = new[]
+			{
+				new DiagnosticResultLocation("Test0.cs", 4, 18)
+			}
+		};
+
+		VerifyCSharpDiagnostic(test, expected);
+	}
+
+	[TestMethod]
+	public void DataContractRule_DataContractAttributeOmittedWithField_DiagnosticResult()
+	{
+		var test =
+			@"
+				using System.Runtime.Serialization;
+
+				public class Test
+				{
+					[DataMember]
+					private string _field;
+				}";
+		var rule = new DataContractRequireIfUsingDataMemberRule();
+		var expected = new DiagnosticResult()
+		{
+			Id = rule.DiagnosticDescriptor.Id,
+			Message = rule.DiagnosticDescriptor.MessageFormat.ToString(),
+			Severity = DiagnosticSeverity.Warning,
+			Locations = new[]
+			{
+				new DiagnosticResultLocation("Test0.cs", 4, 18)
+			}
+		};
+
+		VerifyCSharpDiagnostic(test, expected);
+	}
+
+	[TestMethod]
+	public void DataContractRule_DataContractAttributeProvided_NoDiagnostic()
+	{
+		var test =
+			@"
+				using System.Runtime.Serialization;
+
+				[DataContract]
+				public class Test
+				{
+					[DataMember]
+					public string Property { get; set; }
+
+					public string Property2 { get; set; }
+
+					private string _field;
+				}";
+
+		VerifyCSharpDiagnostic(test);
+	}
+
+	[TestMethod]
+	public void DataContractRule_DataContractAttributeProvidedOnBaseType_NoDiagnostic()
+	{
+		var test =
+			@"
+				using System.Runtime.Serialization;
+
+				public class Child : Base
+				{
+					[DataMember]
+					public string Property2 { get; set; }
+				}
+
+				[DataContract]
+				public class Base
+				{
+					[DataMember]
+					public string Property1 { get; set; }
+				}";
+
+		VerifyCSharpDiagnostic(test);
+	}
+
+	[TestMethod]
+	public void DataContractRule_DataMemberAttributeOnBothParentAndChild_TwoDiagnosticResults()
+	{
+		var test =
+			@"
+				using System.Runtime.Serialization;
+
+				public class Child : Base
+				{
+					[DataMember]
+					public string Property2 { get; set; }
+				}
+
+				public class Base
+				{
+					[DataMember]
+					public string Property1 { get; set; }
+				}";
+		var rule = new DataContractRequireIfUsingDataMemberRule();
+		var expected = new[]
+		{
+			new DiagnosticResult()
+			{
+				Id = rule.DiagnosticDescriptor.Id,
+				Message = rule.DiagnosticDescriptor.MessageFormat.ToString(),
+				Severity = DiagnosticSeverity.Warning,
+				Locations = new[]
+				{
+					new DiagnosticResultLocation("Test0.cs", 4, 18)
+				}
+			},
+			new DiagnosticResult()
+			{
+				Id = rule.DiagnosticDescriptor.Id,
+				Message = rule.DiagnosticDescriptor.MessageFormat.ToString(),
+				Severity = DiagnosticSeverity.Warning,
+				Locations = new[]
+				{
+					new DiagnosticResultLocation("Test0.cs", 10, 18)
+				}
+			},
+		};
+
+		VerifyCSharpDiagnostic(test, expected);
+	}
+
 	/*
 	[TestMethod]
 	public void TabsFormattedBySpaces()
