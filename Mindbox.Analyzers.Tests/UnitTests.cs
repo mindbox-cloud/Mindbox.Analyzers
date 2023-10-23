@@ -233,6 +233,33 @@ public class UnitTest : CodeFixVerifier
 	}
 
 	[TestMethod]
+	public void DataContractRule_DataContractAttributeOmittedWithField_DiagnosticResult()
+	{
+		var test =
+			@"
+				using System.Runtime.Serialization;
+
+				public class Test
+				{
+					[DataMember]
+					private string _field;
+				}";
+		var rule = new DataContractRequireIfUsingDataMemberRule();
+		var expected = new DiagnosticResult()
+		{
+			Id = rule.DiagnosticDescriptor.Id,
+			Message = rule.DiagnosticDescriptor.MessageFormat.ToString(),
+			Severity = DiagnosticSeverity.Warning,
+			Locations = new[]
+			{
+				new DiagnosticResultLocation("Test0.cs", 4, 18)
+			}
+		};
+
+		VerifyCSharpDiagnostic(test, expected);
+	}
+
+	[TestMethod]
 	public void DataContractRule_DataContractAttributeProvided_NoDiagnostic()
 	{
 		var test =
@@ -244,6 +271,10 @@ public class UnitTest : CodeFixVerifier
 				{
 					[DataMember]
 					public string Property { get; set; }
+
+					public string Property2 { get; set; }
+
+					private string _field;
 				}";
 
 		VerifyCSharpDiagnostic(test);
