@@ -16,6 +16,9 @@ indent_style = tab
 
 csharp_style_namespace_declarations = file_scoped
 
+# IDE0290 Use primary constructors
+dotnet_diagnostic.IDE0290.severity = none
+
 # Error IDE0300 : Collection initialization can be simplified (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0300)
 dotnet_diagnostic.IDE0300.severity = suggestion
 
