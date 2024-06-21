@@ -16,6 +16,18 @@ indent_style = tab
 
 csharp_style_namespace_declarations = file_scoped
 
+# Error IDE0300 : Collection initialization can be simplified (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0300)
+dotnet_diagnostic.IDE0300.severity = suggestion
+
+# Error IDE0301 : Collection initialization can be simplified (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0301)
+dotnet_diagnostic.IDE0301.severity = suggestion
+
+# Error IDE0305 : Collection initialization can be simplified (https://learn.microsoft.com/dotnet/fundamentals/code-analysis/style-rules/ide0305)
+dotnet_diagnostic.IDE0305.severity = suggestion
+
+# IDE0028 collection initialization simplification
+dotnet_diagnostic.IDE0028.severity = none
+
 # CA2007: Consider calling ConfigureAwait on the awaited task
 dotnet_diagnostic.CA2007.severity = none
 

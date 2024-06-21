@@ -19,7 +19,7 @@ public class ForbidRawSqlOutsideDbProviderSpecificCodeRule : AnalyzerRule, ISema
 		"This rule is intended to prevent the use of raw SQL in shared code when working with a solution " +
 		"that uses the Entity Framework and supports SQL Server and PostgreSQL databases. Raw SQL is only valid " +
 		"in database provider-specific classes whose names begin with 'SqlServer' or 'Postgres'.";
-		
+
 	private readonly string _dbCommandInterfaceType = typeof(IDbCommand).ToString();
 
 	public ForbidRawSqlOutsideDbProviderSpecificCodeRule()
@@ -41,7 +41,7 @@ public class ForbidRawSqlOutsideDbProviderSpecificCodeRule : AnalyzerRule, ISema
 		foreach (var syntaxNode in memberAccessExpressionSyntaxNodes)
 		{
 			var parentClassName = GetParentClassNode(syntaxNode);
-			
+
 			if (parentClassName.StartsWith("SqlServer") || parentClassName.StartsWith("Postgres"))
 				continue;
 
@@ -53,7 +53,7 @@ public class ForbidRawSqlOutsideDbProviderSpecificCodeRule : AnalyzerRule, ISema
 			}
 		}
 	}
-	
+
 	private bool IsIDbCommandOrDerived(ITypeSymbol typeSymbol)
 	{
 		if (typeSymbol == null)
@@ -62,7 +62,7 @@ public class ForbidRawSqlOutsideDbProviderSpecificCodeRule : AnalyzerRule, ISema
 		}
 
 		if (typeSymbol.ToString() == _dbCommandInterfaceType ||
-		    typeSymbol.Interfaces.Any(item => item.ToString() == _dbCommandInterfaceType))
+			typeSymbol.Interfaces.Any(item => item.ToString() == _dbCommandInterfaceType))
 		{
 			return true;
 		}
