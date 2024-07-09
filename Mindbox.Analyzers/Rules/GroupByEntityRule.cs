@@ -35,55 +35,86 @@ public class GroupByEntityRule : AnalyzerRule, ISemanticModelAnalyzerRule
 
 		foreach (var invocationExpression in invocationExpressions)
 		{
-			if (invocationExpression.Expression is not MemberAccessExpressionSyntax memberAccessExpr)
+			if (!TryGetMethodSymbol(model, invocationExpression, out var methodSymbol)
+				|| !IsGroupByMethod(methodSymbol)
+				|| !TryGetGroupByProperty(model, invocationExpression, out var groupByProperty)
+				|| !HasTableAttribute(groupByProperty.Type))
 			{
 				continue;
 			}
 
-			if (model.GetSymbolInfo(memberAccessExpr).Symbol is not IMethodSymbol memberSymbol
-				|| memberSymbol.ContainingNamespace.ToString() != "System.Linq"
-				|| memberSymbol.ContainingType.Name != "Queryable"
-				|| memberSymbol.Name != "GroupBy")
-			{
-				continue;
-			}
-
-			var argumentList = invocationExpression.ArgumentList.Arguments;
-			if (argumentList.Count == 0)
-			{
-				continue;
-			}
-
-			if (argumentList[0].Expression is not SimpleLambdaExpressionSyntax lambdaExpr)
-			{
-				continue;
-			}
-
-			if (lambdaExpr.Body is not MemberAccessExpressionSyntax groupByProperty)
-			{
-				continue;
-			}
-
-			if (model.GetSymbolInfo(groupByProperty).Symbol is not IPropertySymbol propertySymbol)
-			{
-				continue;
-			}
-
-			var propertyTypeSymbol = propertySymbol.Type;
-			var attributes = propertyTypeSymbol.GetAttributes();
-
-			var tableAttribute = attributes.FirstOrDefault(x =>
-				x.AttributeClass is not null
-				&& x.AttributeClass.ContainingNamespace.ToString() == "System.ComponentModel.DataAnnotations.Schema"
-				&& x.AttributeClass.Name == "TableAttribute");
-
-			if (tableAttribute is null)
-			{
-				continue;
-			}
-
-			var diagnostic = CreateDiagnosticForLocation(groupByProperty.GetLocation());
+			var diagnostic = CreateDiagnosticForLocation(invocationExpression.GetLocation());
 			foundProblems.Add(diagnostic);
 		}
+	}
+
+	private static bool HasTableAttribute(ITypeSymbol typeSymbol)
+	{
+		var attributes = typeSymbol.GetAttributes();
+
+		var attributeData = attributes.FirstOrDefault(x =>
+			x.AttributeClass is not null
+			&& x.AttributeClass.ContainingNamespace.ToString() == "System.ComponentModel.DataAnnotations.Schema"
+			&& x.AttributeClass.Name == "TableAttribute");
+
+		return attributeData is not null;
+	}
+
+	private static bool TryGetGroupByProperty(
+		SemanticModel model,
+		InvocationExpressionSyntax invocationExpression,
+		out IPropertySymbol groupByProperty)
+	{
+		groupByProperty = null;
+
+		var argumentList = invocationExpression.ArgumentList.Arguments;
+		if (argumentList.Count == 0)
+		{
+			return false;
+		}
+
+		if (argumentList[0].Expression is not SimpleLambdaExpressionSyntax lambdaExpr)
+		{
+			return false;
+		}
+
+		if (lambdaExpr.Body is not MemberAccessExpressionSyntax memberAccessExpression)
+		{
+			return false;
+		}
+
+		if (model.GetSymbolInfo(memberAccessExpression).Symbol is not IPropertySymbol propertySymbol)
+		{
+			return false;
+		}
+
+		groupByProperty = propertySymbol;
+		return true;
+	}
+
+	private static bool IsGroupByMethod(IMethodSymbol methodSymbol)
+	{
+		return
+			methodSymbol.ContainingNamespace.ToString() == "System.Linq"
+			&& methodSymbol.ContainingType.Name == "Queryable"
+			&& methodSymbol.Name == "GroupBy";
+	}
+
+	private static bool TryGetMethodSymbol(SemanticModel model, InvocationExpressionSyntax invocationExpression, out IMethodSymbol methodSymbol)
+	{
+		methodSymbol = null;
+
+		if (invocationExpression.Expression is not MemberAccessExpressionSyntax memberAccessExpr)
+		{
+			return false;
+		}
+
+		if (model.GetSymbolInfo(memberAccessExpr).Symbol is not IMethodSymbol memberSymbol)
+		{
+			return false;
+		}
+
+		methodSymbol = memberSymbol;
+		return true;
 	}
 }
