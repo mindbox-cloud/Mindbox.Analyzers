@@ -3,7 +3,7 @@ name: Main Build
 on:
   push:
     branches:
-      - publish-dev
+      - publish-dev/**
 
 jobs:
   build:
