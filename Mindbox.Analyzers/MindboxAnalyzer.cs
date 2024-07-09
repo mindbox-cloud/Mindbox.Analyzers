@@ -35,7 +35,8 @@ public class MindboxAnalyzer : DiagnosticAnalyzer
 			new ModelApplicationHostControllerServiceLocatorProhibitedRule(),
 			new NamedObjectModelConfigurationRegisterProhibitedRule(),
 			new DataContractRequireIfUsingDataMemberRule(),
-			new ForbidRawSqlOutsideDbProviderSpecificCodeRule()
+			new ForbidRawSqlOutsideDbProviderSpecificCodeRule(),
+			new GroupByEntityRule()
 		};
 
 		_supportedDiagnostics =
