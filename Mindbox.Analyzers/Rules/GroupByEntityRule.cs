@@ -43,6 +43,7 @@ public class GroupByEntityRule : AnalyzerRule, ISemanticModelAnalyzerRule
 
 			if (model.GetSymbolInfo(memberAccessExpr).Symbol is not IMethodSymbol memberSymbol
 				|| memberSymbol.ContainingNamespace.ToString() != "System.Linq"
+				|| memberSymbol.ContainingType.Name != "Queryable"
 				|| memberSymbol.Name != "GroupBy")
 			{
 				continue;
