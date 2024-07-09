@@ -5,16 +5,21 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace MindboxAnalyzers.Rules;
 
-public class GroupByEntityRule : AnalyzerRule, ISemanticModelAnalyzerRule
+public class ForbidGroupingByNavigationPropertiesRule : AnalyzerRule, ISemanticModelAnalyzerRule
 {
 	private const string RuleId = "Mindbox2005";
+
 	private const string Title = "Grouping by navigation property check";
-	private const string MessageFormat = "Grouping by navigation properties is not allowed";
+
+	private const string MessageFormat =
+		"Grouping by navigation properties is not allowed to avoid issues with generated query. " +
+		"Instead, group by key columns of related entity and load it manually after materialization (if necessary)";
+
 	private const string Description =
 		"Grouping by navigation properties is not allowed to avoid issues " +
 		"with xmin/xid in Postgres (see https://github.com/npgsql/efcore.pg/issues/3202)";
 
-	public GroupByEntityRule()
+	public ForbidGroupingByNavigationPropertiesRule()
 		: base(
 			ruleId: RuleId,
 			title: Title,
