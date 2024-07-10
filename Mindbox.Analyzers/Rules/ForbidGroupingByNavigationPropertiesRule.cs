@@ -62,7 +62,7 @@ public class ForbidGroupingByNavigationPropertiesRule : AnalyzerRule, ISemanticM
 			&& x.AttributeClass.ContainingNamespace.ToString() == "System.ComponentModel.DataAnnotations.Schema"
 			&& x.AttributeClass.Name == "TableAttribute");
 
-		return attributeData is not null;
+		return attributeData is not null || typeSymbol.BaseType is not null && HasTableAttribute(typeSymbol.BaseType);
 	}
 
 	private static bool TryGetGroupByProperty(
