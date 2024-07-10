@@ -48,7 +48,7 @@ public class ForbidGroupingByNavigationPropertiesRule : AnalyzerRule, ISemanticM
 				continue;
 			}
 
-			var diagnostic = CreateDiagnosticForLocation(invocationExpression.GetLocation());
+			var diagnostic = CreateDiagnosticForLocation(invocationExpression.Expression.GetLocation());
 			foundProblems.Add(diagnostic);
 		}
 	}
