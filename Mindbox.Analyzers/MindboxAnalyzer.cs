@@ -36,7 +36,8 @@ public class MindboxAnalyzer : DiagnosticAnalyzer
 			new NamedObjectModelConfigurationRegisterProhibitedRule(),
 			new DataContractRequireIfUsingDataMemberRule(),
 			new ForbidRawSqlOutsideDbProviderSpecificCodeRule(),
-			new ForbidGroupingByNavigationPropertiesRule()
+			new ForbidGroupingByNavigationPropertiesRule(),
+			new KafkaAdminClientCreateTopicsAndPartitionsProhibitedRule()
 		};
 
 		_supportedDiagnostics =
