@@ -95,10 +95,21 @@ public class UnusedAndSingleUsageClassesRule : AnalyzerRule, ISemanticModelAnaly
 		}
 	}
 
+	private bool IsTestCode(SyntaxTree tree)
+	{
+		return tree.FilePath.Contains("Test");
+	}
+
 	public void AnalyzeModel(SemanticModel model, out ICollection<Diagnostic> foundProblems)
 	{
 		var problems = new List<Diagnostic>();
 		var trackedClasses = new Dictionary<INamedTypeSymbol, ClassInfo>(SymbolEqualityComparer.Default);
+
+		if (IsTestCode(model.SyntaxTree))
+		{
+			foundProblems = problems;
+			return;
+		}
 
 		var root = model.SyntaxTree.GetRoot();
 		foreach (var classDeclaration in root.DescendantNodes().OfType<ClassDeclarationSyntax>())
