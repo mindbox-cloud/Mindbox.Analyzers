@@ -1,8 +1,8 @@
 ﻿<Project>
   <PropertyGroup>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>10</LangVersion>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
 
