@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using Microsoft.CodeAnalysis;
@@ -74,8 +74,8 @@ public class DataContractRequireIfUsingDataMemberRule : AnalyzerRule, ISemanticM
 	private class AttributeAnalyzer
 	{
 		private readonly SemanticModel _model;
-		private static INamedTypeSymbol _dataMemberAttribute;
-		private static INamedTypeSymbol _dataContractAttribute;
+		private readonly INamedTypeSymbol _dataMemberAttribute;
+		private readonly INamedTypeSymbol _dataContractAttribute;
 
 		public AttributeAnalyzer(SemanticModel model)
 		{
