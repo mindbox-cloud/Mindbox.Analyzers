@@ -393,13 +393,26 @@ public class UnitTest : CodeFixVerifier
 		var test = @"
 			public static class GraphQlEndpointExtensions
 			{
-				public static GraphQlEndpointConventionBuilder MapGraphQL(this object builder) => new GraphQlEndpointConventionBuilder();
+				public static GraphQlEndpointConventionBuilder MapGraphQL(
+					this object builder)
+				{
+					return new GraphQlEndpointConventionBuilder();
+				}
 			}
 
 			public static class AuthorizationExtensions
 			{
-				public static GraphQlEndpointConventionBuilder AllowAnonymous(this GraphQlEndpointConventionBuilder builder) => builder;
-				public static GraphQlEndpointConventionBuilder RequireAuthorization(this GraphQlEndpointConventionBuilder builder) => builder;
+				public static GraphQlEndpointConventionBuilder AllowAnonymous(
+					this GraphQlEndpointConventionBuilder builder)
+				{
+					return builder;
+				}
+
+				public static GraphQlEndpointConventionBuilder RequireAuthorization(
+					this GraphQlEndpointConventionBuilder builder)
+				{
+					return builder;
+				}
 			}
 
 			public class GraphQlEndpointConventionBuilder
@@ -422,7 +435,7 @@ public class UnitTest : CodeFixVerifier
 			Severity = DiagnosticSeverity.Warning,
 			Locations = new[]
 			{
-				new DiagnosticResultLocation("Test0.cs", 20, 6)
+				new DiagnosticResultLocation("Test0.cs", 31, 6)
 			}
 		};
 
@@ -435,13 +448,26 @@ public class UnitTest : CodeFixVerifier
 		var test = @"
 			public static class GraphQlEndpointExtensions
 			{
-				public static GraphQlEndpointConventionBuilder MapGraphQL(this object builder) => new GraphQlEndpointConventionBuilder();
+				public static GraphQlEndpointConventionBuilder MapGraphQL(
+					this object builder)
+				{
+					return new GraphQlEndpointConventionBuilder();
+				}
 			}
 
 			public static class AuthorizationExtensions
 			{
-				public static GraphQlEndpointConventionBuilder AllowAnonymous(this GraphQlEndpointConventionBuilder builder) => builder;
-				public static GraphQlEndpointConventionBuilder RequireAuthorization(this GraphQlEndpointConventionBuilder builder) => builder;
+				public static GraphQlEndpointConventionBuilder AllowAnonymous(
+					this GraphQlEndpointConventionBuilder builder)
+				{
+					return builder;
+				}
+
+				public static GraphQlEndpointConventionBuilder RequireAuthorization(
+					this GraphQlEndpointConventionBuilder builder)
+				{
+					return builder;
+				}
 			}
 
 			public class GraphQlEndpointConventionBuilder
@@ -465,12 +491,20 @@ public class UnitTest : CodeFixVerifier
 		var test = @"
 			public static class GraphQlEndpointExtensions
 			{
-				public static GraphQlEndpointConventionBuilder MapGraphQL(this object builder) => new GraphQlEndpointConventionBuilder();
+				public static GraphQlEndpointConventionBuilder MapGraphQL(
+					this object builder)
+				{
+					return new GraphQlEndpointConventionBuilder();
+				}
 			}
 
 			public static class AuthorizationExtensions
 			{
-				public static GraphQlEndpointConventionBuilder AllowAnonymous(this GraphQlEndpointConventionBuilder builder) => builder;
+				public static GraphQlEndpointConventionBuilder AllowAnonymous(
+					this GraphQlEndpointConventionBuilder builder)
+				{
+					return builder;
+				}
 			}
 
 			public class GraphQlEndpointConventionBuilder
@@ -494,7 +528,7 @@ public class UnitTest : CodeFixVerifier
 			Severity = DiagnosticSeverity.Warning,
 			Locations = new[]
 			{
-				new DiagnosticResultLocation("Test0.cs", 20, 6)
+				new DiagnosticResultLocation("Test0.cs", 25, 6)
 			}
 		};
 
@@ -507,13 +541,26 @@ public class UnitTest : CodeFixVerifier
 		var test = @"
 			public static class GraphQlEndpointExtensions
 			{
-				public static GraphQlEndpointConventionBuilder MapGraphQL(this object builder) => new GraphQlEndpointConventionBuilder();
-				public static GraphQlEndpointConventionBuilder RequireCors(this GraphQlEndpointConventionBuilder builder) => builder;
+				public static GraphQlEndpointConventionBuilder MapGraphQL(
+					this object builder)
+				{
+					return new GraphQlEndpointConventionBuilder();
+				}
+
+				public static GraphQlEndpointConventionBuilder RequireCors(
+					this GraphQlEndpointConventionBuilder builder)
+				{
+					return builder;
+				}
 			}
 
 			public static class AuthorizationExtensions
 			{
-				public static GraphQlEndpointConventionBuilder AllowAnonymous(this GraphQlEndpointConventionBuilder builder) => builder;
+				public static GraphQlEndpointConventionBuilder AllowAnonymous(
+					this GraphQlEndpointConventionBuilder builder)
+				{
+					return builder;
+				}
 			}
 
 			public class GraphQlEndpointConventionBuilder
@@ -538,7 +585,7 @@ public class UnitTest : CodeFixVerifier
 			Severity = DiagnosticSeverity.Warning,
 			Locations = new[]
 			{
-				new DiagnosticResultLocation("Test0.cs", 22, 6)
+				new DiagnosticResultLocation("Test0.cs", 31, 6)
 			}
 		};
 
@@ -551,12 +598,20 @@ public class UnitTest : CodeFixVerifier
 		var test = @"
 			public static class EndpointExtensions
 			{
-				public static HttpEndpointConventionBuilder MapGet(this object builder) => new HttpEndpointConventionBuilder();
+				public static HttpEndpointConventionBuilder MapGet(
+					this object builder)
+				{
+					return new HttpEndpointConventionBuilder();
+				}
 			}
 
 			public static class AuthorizationExtensions
 			{
-				public static HttpEndpointConventionBuilder AllowAnonymous(this HttpEndpointConventionBuilder builder) => builder;
+				public static HttpEndpointConventionBuilder AllowAnonymous(
+					this HttpEndpointConventionBuilder builder)
+				{
+					return builder;
+				}
 			}
 
 			public class HttpEndpointConventionBuilder
