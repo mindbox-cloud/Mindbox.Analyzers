@@ -80,8 +80,8 @@ public class DataContractRequireIfUsingDataMemberRule : AnalyzerRule, ISemanticM
 		public AttributeAnalyzer(SemanticModel model)
 		{
 			_model = model;
-			_dataMemberAttribute ??= model.Compilation.GetTypeByMetadataName(typeof(DataMemberAttribute).FullName!);
-			_dataContractAttribute ??= model.Compilation.GetTypeByMetadataName(typeof(DataContractAttribute).FullName!);
+			_dataMemberAttribute ??= model.Compilation.GetTypeByMetadataName(typeof(DataMemberAttribute).FullName);
+			_dataContractAttribute ??= model.Compilation.GetTypeByMetadataName(typeof(DataContractAttribute).FullName);
 		}
 
 		public bool ContainsDataMemberAttribute(IEnumerable<INamedTypeSymbol> attributes)

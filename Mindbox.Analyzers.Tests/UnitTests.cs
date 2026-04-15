@@ -386,6 +386,249 @@ public class UnitTest : CodeFixVerifier
 		VerifyCSharpDiagnostic(test, expected);
 	}
 	*/
+
+	[TestMethod]
+	public void GraphQlEndpointAllowAnonymous_ProducesDiagnostic()
+	{
+		var test = @"
+			public static class GraphQlEndpointExtensions
+			{
+				public static GraphQlEndpointConventionBuilder MapGraphQL(
+					this object builder)
+				{
+					return new GraphQlEndpointConventionBuilder();
+				}
+			}
+
+			public static class AuthorizationExtensions
+			{
+				public static GraphQlEndpointConventionBuilder AllowAnonymous(
+					this GraphQlEndpointConventionBuilder builder)
+				{
+					return builder;
+				}
+
+				public static GraphQlEndpointConventionBuilder RequireAuthorization(
+					this GraphQlEndpointConventionBuilder builder)
+				{
+					return builder;
+				}
+			}
+
+			public class GraphQlEndpointConventionBuilder
+			{
+			}
+
+			public class Test
+			{
+				public void Configure(object app)
+				{
+					app.MapGraphQL().AllowAnonymous();
+				}
+			}";
+
+		var rule = new ForbidAnonymousAccessToGraphQlEndpointsRule();
+		var expected = new DiagnosticResult
+		{
+			Id = rule.DiagnosticDescriptor.Id,
+			Message = rule.DiagnosticDescriptor.MessageFormat.ToString(),
+			Severity = DiagnosticSeverity.Warning,
+			Locations = new[]
+			{
+				new DiagnosticResultLocation("Test0.cs", 34, 6)
+			}
+		};
+
+		VerifyCSharpDiagnostic(test, expected);
+	}
+
+	[TestMethod]
+	public void GraphQlEndpointRequireAuthorization_DoesNotProduceDiagnostic()
+	{
+		var test = @"
+			public static class GraphQlEndpointExtensions
+			{
+				public static GraphQlEndpointConventionBuilder MapGraphQL(
+					this object builder)
+				{
+					return new GraphQlEndpointConventionBuilder();
+				}
+			}
+
+			public static class AuthorizationExtensions
+			{
+				public static GraphQlEndpointConventionBuilder AllowAnonymous(
+					this GraphQlEndpointConventionBuilder builder)
+				{
+					return builder;
+				}
+
+				public static GraphQlEndpointConventionBuilder RequireAuthorization(
+					this GraphQlEndpointConventionBuilder builder)
+				{
+					return builder;
+				}
+			}
+
+			public class GraphQlEndpointConventionBuilder
+			{
+			}
+
+			public class Test
+			{
+				public void Configure(object app)
+				{
+					app.MapGraphQL().RequireAuthorization();
+				}
+			}";
+
+		VerifyCSharpDiagnostic(test);
+	}
+
+	[TestMethod]
+	public void GraphQlEndpointAllowAnonymousThroughVariable_ProducesDiagnostic()
+	{
+		var test = @"
+			public static class GraphQlEndpointExtensions
+			{
+				public static GraphQlEndpointConventionBuilder MapGraphQL(
+					this object builder)
+				{
+					return new GraphQlEndpointConventionBuilder();
+				}
+			}
+
+			public static class AuthorizationExtensions
+			{
+				public static GraphQlEndpointConventionBuilder AllowAnonymous(
+					this GraphQlEndpointConventionBuilder builder)
+				{
+					return builder;
+				}
+			}
+
+			public class GraphQlEndpointConventionBuilder
+			{
+			}
+
+			public class Test
+			{
+				public void Configure(object app)
+				{
+					var endpoint = app.MapGraphQL();
+					endpoint.AllowAnonymous();
+				}
+			}";
+
+		var rule = new ForbidAnonymousAccessToGraphQlEndpointsRule();
+		var expected = new DiagnosticResult
+		{
+			Id = rule.DiagnosticDescriptor.Id,
+			Message = rule.DiagnosticDescriptor.MessageFormat.ToString(),
+			Severity = DiagnosticSeverity.Warning,
+			Locations = new[]
+			{
+				new DiagnosticResultLocation("Test0.cs", 29, 6)
+			}
+		};
+
+		VerifyCSharpDiagnostic(test, expected);
+	}
+
+	[TestMethod]
+	public void GraphQlEndpointAllowAnonymousAfterIntermediateVariable_ProducesDiagnostic()
+	{
+		var test = @"
+			public static class GraphQlEndpointExtensions
+			{
+				public static GraphQlEndpointConventionBuilder MapGraphQL(
+					this object builder)
+				{
+					return new GraphQlEndpointConventionBuilder();
+				}
+
+				public static GraphQlEndpointConventionBuilder RequireCors(
+					this GraphQlEndpointConventionBuilder builder)
+				{
+					return builder;
+				}
+			}
+
+			public static class AuthorizationExtensions
+			{
+				public static GraphQlEndpointConventionBuilder AllowAnonymous(
+					this GraphQlEndpointConventionBuilder builder)
+				{
+					return builder;
+				}
+			}
+
+			public class GraphQlEndpointConventionBuilder
+			{
+			}
+
+			public class Test
+			{
+				public void Configure(object app)
+				{
+					var endpoint = app.MapGraphQL();
+					var endpointWithCors = endpoint.RequireCors();
+					endpointWithCors.AllowAnonymous();
+				}
+			}";
+
+		var rule = new ForbidAnonymousAccessToGraphQlEndpointsRule();
+		var expected = new DiagnosticResult
+		{
+			Id = rule.DiagnosticDescriptor.Id,
+			Message = rule.DiagnosticDescriptor.MessageFormat.ToString(),
+			Severity = DiagnosticSeverity.Warning,
+			Locations = new[]
+			{
+				new DiagnosticResultLocation("Test0.cs", 36, 6)
+			}
+		};
+
+		VerifyCSharpDiagnostic(test, expected);
+	}
+
+	[TestMethod]
+	public void NonGraphQlEndpointAllowAnonymous_DoesNotProduceDiagnostic()
+	{
+		var test = @"
+			public static class EndpointExtensions
+			{
+				public static HttpEndpointConventionBuilder MapGet(
+					this object builder)
+				{
+					return new HttpEndpointConventionBuilder();
+				}
+			}
+
+			public static class AuthorizationExtensions
+			{
+				public static HttpEndpointConventionBuilder AllowAnonymous(
+					this HttpEndpointConventionBuilder builder)
+				{
+					return builder;
+				}
+			}
+
+			public class HttpEndpointConventionBuilder
+			{
+			}
+
+			public class Test
+			{
+				public void Configure(object app)
+				{
+					app.MapGet().AllowAnonymous();
+				}
+			}";
+
+		VerifyCSharpDiagnostic(test);
+	}
+
 	protected override DiagnosticAnalyzer GetCSharpDiagnosticAnalyzer()
 	{
 		return new MindboxAnalyzer();
