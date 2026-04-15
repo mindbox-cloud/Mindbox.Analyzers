@@ -435,7 +435,7 @@ public class UnitTest : CodeFixVerifier
 			Severity = DiagnosticSeverity.Warning,
 			Locations = new[]
 			{
-				new DiagnosticResultLocation("Test0.cs", 31, 6)
+				new DiagnosticResultLocation("Test0.cs", 34, 6)
 			}
 		};
 
@@ -528,7 +528,7 @@ public class UnitTest : CodeFixVerifier
 			Severity = DiagnosticSeverity.Warning,
 			Locations = new[]
 			{
-				new DiagnosticResultLocation("Test0.cs", 25, 6)
+				new DiagnosticResultLocation("Test0.cs", 29, 6)
 			}
 		};
 
@@ -585,7 +585,7 @@ public class UnitTest : CodeFixVerifier
 			Severity = DiagnosticSeverity.Warning,
 			Locations = new[]
 			{
-				new DiagnosticResultLocation("Test0.cs", 31, 6)
+				new DiagnosticResultLocation("Test0.cs", 36, 6)
 			}
 		};
 
